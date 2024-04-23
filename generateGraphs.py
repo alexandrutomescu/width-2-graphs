@@ -133,6 +133,6 @@ def solveGreedyWithFirstWeightIP(firstWeight, k, F):
             print(maxDiff, weights, bottleneckWeights)
         elif maxDiff > 0 and len(bottleneckPaths) - len(weights) == maxDiff:
             maxDiffList.append((maxDiff, weights, bottleneckWeights))
-            # print(weights, maxDiff)
+            print(weights, maxDiff)
 
     return maxDiffList
