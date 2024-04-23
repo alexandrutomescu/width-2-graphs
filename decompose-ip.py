@@ -51,14 +51,8 @@ if __name__ == '__main__':
     for result in results:
         # append result to file names args.output
         result_str = '\n'.join(map(str,result.get()))
-        try:
-            with open(args.output, 'a') as file:
-                file.write((result_str) + '\n')
-        except FileNotFoundError:
-            with open(args.output, 'w') as file:
-                file.write((result_str) + '\n')
-
-    
+        with open(args.output, 'a') as file:
+            file.write((result_str) + '\n')
 
     
     
