@@ -3,6 +3,48 @@ import itertools
 from st_fd import *
 from bottleneck import *
 
+# From here: https://ics.uci.edu/~eppstein/PADS/IntegerPartitions.py
+def fixed_length_partitions(n,L):
+    """
+    Integer partitions of n into L parts, in colex order.
+    The algorithm follows Knuth v4 fasc3 p38 in rough outline;
+    Knuth credits it to Hindenburg, 1779.
+    """
+    
+    # guard against special cases
+    if L == 0:
+        if n == 0:
+            yield []
+        return
+    if L == 1:
+        if n > 0:
+            yield [n]
+        return
+    if n < L:
+        return
+
+    partition = [n - L + 1] + (L-1)*[1]
+    while True:
+        yield partition
+        if partition[0] - 1 > partition[1]:
+            partition[0] -= 1
+            partition[1] += 1
+            continue
+        j = 2
+        s = partition[0] + partition[1] - 1
+        while j < L and partition[j] >= partition[0] - 1:
+            s += partition[j]
+            j += 1
+        if j >= L:
+            return
+        partition[j] = x = partition[j] + 1
+        j -= 1
+        while j > 0:
+            partition[j] = x
+            s -= x
+            j -= 1
+        partition[0] = s
+
 def generate_lists(upper_bound, length, current_list=[]):
     if len(current_list) < length:
         for i in range(1,upper_bound+1):
@@ -73,5 +115,24 @@ def solveGreedyWithFirstWeight(firstWeight, k, T):
             maxDiffList = [(maxDiff, weights, bottleneckWeights)]
         elif maxDiff > 0 and len(bottleneckPaths) - len(weights) == maxDiff:
             maxDiffList.append((maxDiff, weights, bottleneckWeights))
+
+    return maxDiffList
+
+def solveGreedyWithFirstWeightIP(firstWeight, k, F):
+    
+    maxDiff = 0
+    maxDiffList = []
+
+    for weights in fixed_length_partitions(F - firstWeight, k - 1):
+        weights = [firstWeight] + weights
+        
+        bottleneckPaths, bottleneckWeights = solveGreedy(weights)
+        if len(bottleneckPaths) - len(weights) > maxDiff:
+            maxDiff = len(bottleneckPaths) - len(weights)
+            maxDiffList = [(maxDiff, weights, bottleneckWeights)]
+            print(weights, maxDiff)
+        elif maxDiff > 0 and len(bottleneckPaths) - len(weights) == maxDiff:
+            maxDiffList.append((maxDiff, weights, bottleneckWeights))
+            print(weights, maxDiff)
 
     return maxDiffList
