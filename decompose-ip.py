@@ -35,12 +35,13 @@ k = args.k
 T = args.max
 F = args.flow
 
+log_file = args.output.split('.')[0] + '.log'
 
 if __name__ == '__main__':
     pool = multiprocessing.Pool(threads)
     results = []
     for firstWeight in range(1, F):
-        result = pool.apply_async(solveGreedyWithFirstWeightIP, (firstWeight, k, F))
+        result = pool.apply_async(solveGreedyWithFirstWeightIP, (firstWeight, k, F, log_file))
         results.append(result)
     
     pool.close()

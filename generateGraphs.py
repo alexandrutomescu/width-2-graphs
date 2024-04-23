@@ -118,7 +118,7 @@ def solveGreedyWithFirstWeight(firstWeight, k, T):
 
     return maxDiffList
 
-def solveGreedyWithFirstWeightIP(firstWeight, k, F):
+def solveGreedyWithFirstWeightIP(firstWeight, k, F, log_file):
     
     maxDiff = 0
     maxDiffList = []
@@ -131,6 +131,10 @@ def solveGreedyWithFirstWeightIP(firstWeight, k, F):
             maxDiff = len(bottleneckPaths) - len(weights)
             maxDiffList = [(maxDiff, weights, bottleneckWeights)]
             print(maxDiff, weights, bottleneckWeights)
+            # write the above also in a path called output.txt
+            with open(log_file, "a") as file:
+                file.write(f"{maxDiff} {weights} {bottleneckWeights}\n")
+
         elif maxDiff > 0 and len(bottleneckPaths) - len(weights) == maxDiff:
             maxDiffList.append((maxDiff, weights, bottleneckWeights))
             print(weights, maxDiff)
