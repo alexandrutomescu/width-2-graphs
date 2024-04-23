@@ -64,7 +64,7 @@ def solveGreedyWithFirstWeight(firstWeight, k, T):
     maxDiff = 2
     maxDiffList = []
 
-    for weights in itertools.combinations(range(1, T+1), k - 1):
+    for weights in itertools.combinations(range(firstWeight+1, T+1), k - 1):
         weights = [firstWeight] + list(weights)
         
         bottleneckPaths, bottleneckWeights = solveGreedy(weights)
